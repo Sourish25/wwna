@@ -35,7 +35,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 	# Flashlight on/off check
-	var is_toggle_key := event is InputEventKey and event.pressed and event.keycode == KEY_F and not event.echo
+	var is_toggle_key := false
+	if event is InputEventKey:
+		var key_event := event as InputEventKey
+		is_toggle_key = key_event.pressed and key_event.keycode == KEY_F and not key_event.echo
+		
 	if event.is_action_pressed("toggle_flashlight") or is_toggle_key:
 		if flashlight:
 			flashlight.visible = not flashlight.visible
