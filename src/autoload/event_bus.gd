@@ -16,4 +16,4 @@ signal level_failed(reason: String)
 signal interaction_prompted(text: String)
 signal interaction_cleared
 signal game_paused(is_paused: bool)
-signal dialog_triggered(text: String, duration: float, audio_path: String = "")
+signal dialog_triggered(text: String, duration: float, audio_path: String)

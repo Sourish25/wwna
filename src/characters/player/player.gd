@@ -63,7 +63,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			AudioSynth.play_flashlight_click(self)
 
 	# E key Interaction check
-	var is_interact_key := event is InputEventKey and event.pressed and event.keycode == KEY_E and not event.echo
+	var is_interact_key := false
+	if event is InputEventKey:
+		var key_event := event as InputEventKey
+		is_interact_key = key_event.pressed and key_event.keycode == KEY_E and not key_event.echo
+		
 	if is_interact_key and _active_interactable:
 		_active_interactable.interact(self)
 

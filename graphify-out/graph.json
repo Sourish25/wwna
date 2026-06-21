@@ -1,0 +1,261 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "download_dialog_and_sfx.py",
+      "file_type": "code",
+      "source_file": "download_dialog_and_sfx.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "download_dialog_and_sfx",
+      "community": 0,
+      "norm_label": "download_dialog_and_sfx.py"
+    },
+    {
+      "label": "get_wikimedia_direct_url()",
+      "file_type": "code",
+      "source_file": "download_dialog_and_sfx.py",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "download_dialog_and_sfx_get_wikimedia_direct_url",
+      "community": 0,
+      "norm_label": "get_wikimedia_direct_url()"
+    },
+    {
+      "label": "download_file()",
+      "file_type": "code",
+      "source_file": "download_dialog_and_sfx.py",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "download_dialog_and_sfx_download_file",
+      "community": 0,
+      "norm_label": "download_file()"
+    },
+    {
+      "label": "download_tts()",
+      "file_type": "code",
+      "source_file": "download_dialog_and_sfx.py",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "download_dialog_and_sfx_download_tts",
+      "community": 0,
+      "norm_label": "download_tts()"
+    },
+    {
+      "label": "download_sounds.py",
+      "file_type": "code",
+      "source_file": "download_sounds.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "download_sounds",
+      "community": 2,
+      "norm_label": "download_sounds.py"
+    },
+    {
+      "label": "get_wikimedia_direct_url()",
+      "file_type": "code",
+      "source_file": "download_sounds.py",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "download_sounds_get_wikimedia_direct_url",
+      "community": 2,
+      "norm_label": "get_wikimedia_direct_url()"
+    },
+    {
+      "label": "download_file()",
+      "file_type": "code",
+      "source_file": "download_sounds.py",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "download_sounds_download_file",
+      "community": 2,
+      "norm_label": "download_file()"
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "readme",
+      "community": 1,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "We Were Not Alone",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "readme_we_were_not_alone",
+      "community": 1,
+      "norm_label": "we were not alone"
+    },
+    {
+      "label": "Project Structure",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "readme_project_structure",
+      "community": 1,
+      "norm_label": "project structure"
+    },
+    {
+      "label": "Getting Started",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "readme_getting_started",
+      "community": 1,
+      "norm_label": "getting started"
+    },
+    {
+      "label": "Architecture Overview",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "readme_architecture_overview",
+      "community": 3,
+      "norm_label": "architecture overview"
+    },
+    {
+      "label": "Autoloads",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "readme_autoloads",
+      "community": 3,
+      "norm_label": "autoloads"
+    },
+    {
+      "label": "Components",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L44",
+      "_origin": "ast",
+      "id": "readme_components",
+      "community": 3,
+      "norm_label": "components"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "download_dialog_and_sfx.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "download_dialog_and_sfx",
+      "target": "download_dialog_and_sfx_download_file",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "download_dialog_and_sfx.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "download_dialog_and_sfx",
+      "target": "download_dialog_and_sfx_download_tts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "download_dialog_and_sfx.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "download_dialog_and_sfx",
+      "target": "download_dialog_and_sfx_get_wikimedia_direct_url",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "download_sounds.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "download_sounds",
+      "target": "download_sounds_download_file",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "download_sounds.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "download_sounds",
+      "target": "download_sounds_get_wikimedia_direct_url",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "readme_we_were_not_alone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "readme_we_were_not_alone",
+      "target": "readme_architecture_overview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "readme_we_were_not_alone",
+      "target": "readme_getting_started",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "readme_we_were_not_alone",
+      "target": "readme_project_structure",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "readme_architecture_overview",
+      "target": "readme_autoloads",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "readme_architecture_overview",
+      "target": "readme_components",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "a087af8d7feccba93064eaf18bcada446ed802e6"
+}

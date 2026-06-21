@@ -164,7 +164,7 @@ func _play_shriek_noise() -> void:
 				var freq := 800.0 + sin(2.0 * PI * 80.0 * t) * 300.0
 				var osc := sin(2.0 * PI * freq * t) * 0.3 * exp(-3.0 * t)
 				var noise := (randf() * 2.0 - 1.0) * 0.15 * exp(-1.5 * t)
-				var sample := clamp(osc + noise, -1.0, 1.0)
+				var sample: float = clamp(osc + noise, -1.0, 1.0)
 				playback.push_frame(Vector2(sample, sample))
 		await player.finished
 		

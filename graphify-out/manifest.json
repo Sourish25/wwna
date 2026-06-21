@@ -1,0 +1,57 @@
+{
+  "download_dialog_and_sfx.py": {
+    "mtime": 1782064433.2978885,
+    "ast_hash": "51b07d0429b5703e41fef4cd85a02a48",
+    "semantic_hash": ""
+  },
+  "download_sounds.py": {
+    "mtime": 1782064264.8494966,
+    "ast_hash": "1432c9f1217e56be9067134b483863cd",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1782040239.77252,
+    "ast_hash": "221fd125052857332e7529e711795807",
+    "semantic_hash": ""
+  },
+  "assets/audio/dialog/altar_need_doll.mp3": {
+    "mtime": 1782064441.784747,
+    "ast_hash": "3d2dfe7f95cc3e6c17c0008e3e1d690d",
+    "semantic_hash": ""
+  },
+  "assets/audio/dialog/doll_dialog.mp3": {
+    "mtime": 1782064441.382897,
+    "ast_hash": "abf981273905f0af54e1bd833ae426f2",
+    "semantic_hash": ""
+  },
+  "assets/audio/dialog/start_dialog.mp3": {
+    "mtime": 1782064440.891074,
+    "ast_hash": "66ecc8476102819fca28ba7d82eae5e8",
+    "semantic_hash": ""
+  },
+  "assets/audio/dialog/victory_dialog.mp3": {
+    "mtime": 1782064442.245759,
+    "ast_hash": "6d4150e0307c45cd8d2aad1399569736",
+    "semantic_hash": ""
+  },
+  "assets/audio/music/horror_ambient.ogg": {
+    "mtime": 1782064272.7740307,
+    "ast_hash": "a7adee773e96cf6734bf4f94691a1d5d",
+    "semantic_hash": ""
+  },
+  "assets/audio/sfx/death_scream.ogg": {
+    "mtime": 1782064440.4156525,
+    "ast_hash": "dae0fcc222b2de368452f07c491f33bf",
+    "semantic_hash": ""
+  },
+  "assets/audio/sfx/ghost_laugh.ogg": {
+    "mtime": 1782064270.1278315,
+    "ast_hash": "473717469ef7d5059554c203a72c6aa7",
+    "semantic_hash": ""
+  },
+  "assets/audio/sfx/heartbeat.ogg": {
+    "mtime": 1782064439.1739886,
+    "ast_hash": "9c897a7ed5219fa72747f1d89c3b31e5",
+    "semantic_hash": ""
+  }
+}

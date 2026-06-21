@@ -83,7 +83,7 @@ func _on_victory(_level_name: String) -> void:
 	await get_tree().create_timer(6.0).timeout
 	get_tree().quit()
 
-func _on_dialog_triggered(text: String, duration: float, audio_path: String = "") -> void:
+func _on_dialog_triggered(text: String, duration: float, audio_path: String) -> void:
 	subtitle_label.text = text
 	subtitle_label.modulate.a = 0.0
 	var tween := create_tween()
