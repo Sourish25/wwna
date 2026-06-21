@@ -3,9 +3,9 @@
 class_name Player
 extends CharacterBody3D
 
-@export var speed: float = 5.0
-@export var jump_velocity: float = 4.5
-@export var mouse_sensitivity: float = 0.003
+@export var speed: float = 2.5
+@export var jump_velocity: float = 3.0
+@export var mouse_sensitivity: float = 0.002
 
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var camera: Camera3D = $CameraPivot/Camera3D
@@ -39,11 +39,24 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= gravity * delta
 
 	# Handle Jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	var is_jumping := Input.is_action_just_pressed("jump") or Input.is_key_pressed(KEY_SPACE)
+	if is_jumping and is_on_floor():
 		velocity.y = jump_velocity
 
 	# Get the input direction and handle the movement/deceleration.
-	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var input_dir := Vector2.ZERO
+	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
+		input_dir.y -= 1.0
+	if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
+		input_dir.y += 1.0
+	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
+		input_dir.x -= 1.0
+	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
+		input_dir.x += 1.0
+		
+	if input_dir.length_squared() > 0.0:
+		input_dir = input_dir.normalized()
+		
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	if direction:
