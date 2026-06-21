@@ -12,6 +12,9 @@ extends CharacterBody3D
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var flashlight: SpotLight3D = $CameraPivot/Camera3D/SpotLight3D
 
+var has_doll: bool = false
+var _active_interactable: Interactable = null
+
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 
@@ -44,6 +47,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		if flashlight:
 			flashlight.visible = not flashlight.visible
 			AudioSynth.play_flashlight_click(self)
+
+	# E key Interaction check
+	var is_interact_key := event is InputEventKey and event.pressed and event.keycode == KEY_E and not event.echo
+	if is_interact_key and _active_interactable:
+		_active_interactable.interact(self)
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -79,6 +87,33 @@ func _physics_process(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, 0, speed)
 
 	move_and_slide()
+	_process_interaction()
+
+func _process_interaction() -> void:
+	var space_state := get_world_3d().direct_space_state
+	var from := camera.global_position
+	var to := from - camera.global_transform.basis.z * 3.0
+	
+	var query := PhysicsRayQueryParameters3D.create(from, to, 4)
+	query.collide_with_areas = true
+	query.collide_with_bodies = false
+	
+	var result := space_state.intersect_ray(query)
+	if not result.is_empty():
+		var collider = result.collider
+		if collider is Interactable:
+			if _active_interactable != collider:
+				_active_interactable = collider
+				EventBus.interaction_prompted.emit(_active_interactable.prompt_message)
+			return
+			
+	if _active_interactable:
+		_active_interactable = null
+		EventBus.interaction_cleared.emit()
+
+func take_damage(amount: int) -> void:
+	if health_component:
+		health_component.damage(amount)
 
 func _on_health_changed(current: int, max_health: int) -> void:
 	EventBus.player_health_changed.emit(current, max_health)

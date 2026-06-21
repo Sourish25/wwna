@@ -1,0 +1,77 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://src/items/doll.gd" id="1_doll_gd"]
+[ext_resource type="Script" path="res://src/utils/interactable.gd" id="2_interactable_gd"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(0.6, 0.8, 0.6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_porcelain"]
+albedo_color = Color(0.72, 0.68, 0.65, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dirty_cloth"]
+albedo_color = Color(0.24, 0.2, 0.18, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_black"]
+albedo_color = Color(0.02, 0.02, 0.02, 1)
+roughness = 0.9
+
+[node name="Doll" type="Node3D"]
+script = ExtResource("1_doll_gd")
+
+[node name="Interactable" type="Area3D" parent="."]
+script = ExtResource("2_interactable_gd")
+prompt_message = "[E] Pick Up Doll"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable"]
+shape = SubResource("BoxShape3D_1")
+
+[node name="VisualModel" type="CSGCombiner3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+use_collision = true
+
+[node name="Torso" type="CSGBox3D" parent="VisualModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+size = Vector3(0.18, 0.32, 0.1)
+material = SubResource("StandardMaterial3D_dirty_cloth")
+
+[node name="Head" type="CSGSphere3D" parent="VisualModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 0)
+radius = 0.11
+material = SubResource("StandardMaterial3D_porcelain")
+
+[node name="EyeL" type="CSGSphere3D" parent="VisualModel/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04, 0.03, -0.09)
+radius = 0.02
+material = SubResource("StandardMaterial3D_black")
+
+[node name="EyeR" type="CSGSphere3D" parent="VisualModel/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 0.03, -0.09)
+radius = 0.02
+material = SubResource("StandardMaterial3D_black")
+
+[node name="LegL" type="CSGCylinder3D" parent="VisualModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, -0.27, 0)
+radius = 0.035
+height = 0.26
+material = SubResource("StandardMaterial3D_porcelain")
+
+[node name="LegR" type="CSGCylinder3D" parent="VisualModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.27, 0)
+radius = 0.035
+height = 0.26
+material = SubResource("StandardMaterial3D_porcelain")
+
+[node name="ArmL" type="CSGCylinder3D" parent="VisualModel"]
+transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, -0.12, 0.06, 0)
+radius = 0.03
+height = 0.22
+material = SubResource("StandardMaterial3D_porcelain")
+
+[node name="ArmR" type="CSGCylinder3D" parent="VisualModel"]
+transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0.12, 0.06, 0)
+radius = 0.03
+height = 0.22
+material = SubResource("StandardMaterial3D_porcelain")

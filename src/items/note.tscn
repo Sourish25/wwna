@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://src/items/note.gd" id="1_note_gd"]
+[ext_resource type="Script" path="res://src/utils/interactable.gd" id="2_interactable_gd"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(0.5, 0.4, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_paper"]
+albedo_color = Color(0.82, 0.8, 0.73, 1)
+roughness = 1.0
+
+[node name="Note" type="Node3D"]
+script = ExtResource("1_note_gd")
+
+[node name="Interactable" type="Area3D" parent="."]
+script = ExtResource("2_interactable_gd")
+prompt_message = "[E] Inspect Note"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable"]
+shape = SubResource("BoxShape3D_1")
+
+[node name="PaperMesh" type="CSGBox3D" parent="."]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, 0.01, 0)
+size = Vector3(0.25, 0.01, 0.35)
+material = SubResource("StandardMaterial3D_paper")
