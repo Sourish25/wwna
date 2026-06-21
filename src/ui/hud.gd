@@ -15,6 +15,9 @@ var _active_note_text: String = ""
 var dialog_audio_player: AudioStreamPlayer
 
 func _ready() -> void:
+	# Make sure HUD processes input even when the scene tree is paused
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
 	# Create dialog audio player dynamically
 	dialog_audio_player = AudioStreamPlayer.new()
 	dialog_audio_player.bus = &"Master"
@@ -33,15 +36,21 @@ func _ready() -> void:
 	victory_overlay.visible = false
 	subtitle_label.text = ""
 
-func _unhandled_input(event: InputEvent) -> void:
-	if _is_reading and (event.is_action_pressed("ui_accept") or (event is InputEventKey and event.pressed and event.keycode == KEY_E)):
-		# Close the note
-		_is_reading = false
-		note_overlay.visible = false
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-		get_tree().paused = false
-		# Yield input so player doesn't instantly re-interact
-		get_viewport().set_input_as_handled()
+func _input(event: InputEvent) -> void:
+	if _is_reading:
+		var is_close_key := false
+		if event is InputEventKey:
+			var key_event := event as InputEventKey
+			is_close_key = key_event.pressed and (key_event.keycode == KEY_E or key_event.keycode == KEY_SPACE or key_event.keycode == KEY_ENTER) and not key_event.echo
+			
+		if is_close_key or event.is_action_pressed("ui_accept"):
+			# Close the note
+			_is_reading = false
+			note_overlay.visible = false
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+			get_tree().paused = false
+			# Yield input so player doesn't instantly re-interact
+			get_viewport().set_input_as_handled()
 
 func show_note(text: String) -> void:
 	_active_note_text = text
