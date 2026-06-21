@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://src/levels/base_level.gd" id="1_base_level_gd"]
 [ext_resource type="PackedScene" path="res://src/characters/player/player.tscn" id="2_player_tscn"]
+[ext_resource type="Script" path="res://src/utils/interactable.gd" id="2_interactable_gd"]
 [ext_resource type="Script" path="res://src/levels/flickering_light.gd" id="3_flickering_light_gd"]
 [ext_resource type="Environment" path="res://src/levels/horror_env.tres" id="4_horror_env_tres"]
 [ext_resource type="Material" path="res://src/levels/wall_material.tres" id="5_wall_material_tres"]
