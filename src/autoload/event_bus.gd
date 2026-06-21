@@ -1,5 +1,6 @@
 # event_bus.gd
 # Global Signal Bus for decoupling game systems
+@warning_ignore("unused_signal")
 extends Node
 
 # Player Signals
