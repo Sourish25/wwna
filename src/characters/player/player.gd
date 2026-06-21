@@ -17,6 +17,9 @@ var _active_interactable: Interactable = null
 var heartbeat_player: AudioStreamPlayer
 var _ghost_node: Ghost = null
 var is_flashlight_enabled: bool = true
+var is_crouching: bool = false
+var is_hidden: bool = false
+
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
@@ -82,8 +85,42 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
-	# Handle Jump.
-	var is_jumping := (InputMap.has_action("jump") and Input.is_action_just_pressed("jump")) or Input.is_key_pressed(KEY_SPACE)
+	# Handle Crouch input
+	var crouch_pressed := Input.is_key_pressed(KEY_C) or Input.is_key_pressed(KEY_CTRL)
+	
+	# Overhead ceiling check before allowing the player to stand up
+	if is_crouching and not crouch_pressed:
+		var space_state := get_world_3d().direct_space_state
+		var from := global_position + Vector3(0, 0.5, 0)
+		var to := global_position + Vector3(0, 1.8, 0)
+		var query := PhysicsRayQueryParameters3D.create(from, to, 1) # Layer 1 (Geometry)
+		query.exclude = [get_rid()]
+		var result := space_state.intersect_ray(query)
+		if not result.is_empty():
+			# Overhead obstacle detected, force player to stay crouched
+			is_crouching = true
+		else:
+			is_crouching = false
+	else:
+		is_crouching = crouch_pressed
+
+	# Smoothly interpolate collision shape height and camera height
+	var target_height := 0.9 if is_crouching else 1.8
+	var target_cam_y := 0.8 if is_crouching else 1.6
+	
+	var col_shape := $CollisionShape3D
+	if col_shape and col_shape.shape is CapsuleShape3D:
+		var capsule := col_shape.shape as CapsuleShape3D
+		capsule.height = lerp(capsule.height, target_height, delta * 12.0)
+		col_shape.position.y = capsule.height * 0.5
+		
+	if camera_pivot:
+		camera_pivot.position.y = lerp(camera_pivot.position.y, target_cam_y, delta * 12.0)
+
+	# Handle Jump (disabled when crouching)
+	var is_jumping := false
+	if not is_crouching:
+		is_jumping = (InputMap.has_action("jump") and Input.is_action_just_pressed("jump")) or Input.is_key_pressed(KEY_SPACE)
 	if is_jumping and is_on_floor():
 		velocity.y = jump_velocity
 
@@ -103,12 +140,15 @@ func _physics_process(delta: float) -> void:
 		
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
+	# Crouch speed is halved
+	var current_speed := speed * 0.5 if is_crouching else speed
+	
 	if direction:
-		velocity.x = direction.x * speed
-		velocity.z = direction.z * speed
+		velocity.x = direction.x * current_speed
+		velocity.z = direction.z * current_speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, speed)
-		velocity.z = move_toward(velocity.z, 0, speed)
+		velocity.x = move_toward(velocity.x, 0, current_speed)
+		velocity.z = move_toward(velocity.z, 0, current_speed)
 
 	move_and_slide()
 	_process_interaction()

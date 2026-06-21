@@ -25,12 +25,13 @@ outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_retro"]
 shader = ExtResource("2_retro_shader")
-shader_parameter/pixel_size = 3.0
-shader_parameter/color_depth = 8.0
-shader_parameter/scanline_strength = 0.25
-shader_parameter/vignette_intensity = 1.2
-shader_parameter/vignette_opacity = 0.85
-shader_parameter/noise_strength = 0.015
+shader_parameter/pixel_size = 2.0
+shader_parameter/color_depth = 16.0
+shader_parameter/scanline_strength = 0.08
+shader_parameter/vignette_intensity = 0.9
+shader_parameter/vignette_opacity = 0.6
+shader_parameter/noise_strength = 0.006
+
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud_gd")

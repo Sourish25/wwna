@@ -16,6 +16,8 @@
 [ext_resource type="PackedScene" path="res://assets/models/extracted/cart.tscn" id="13_cart_tscn"]
 [ext_resource type="PackedScene" path="res://assets/models/extracted/trash_can.tscn" id="14_trash_can_tscn"]
 [ext_resource type="PackedScene" path="res://assets/models/extracted/toilet.tscn" id="15_toilet_tscn"]
+[ext_resource type="Script" path="res://src/utils/hiding_spot.gd" id="16_hiding_spot_gd"]
+
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1"]
 size = Vector3(0.6, 0.8, 0.6)
@@ -40,6 +42,13 @@ roughness = 0.9
 albedo_color = Color(0.15, 0.16, 0.15, 1)
 metallic = 0.6
 roughness = 0.7
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hiding_1"]
+size = Vector3(1.8, 0.7, 0.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hiding_2"]
+size = Vector3(0.9, 0.7, 0.9)
+
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_base_level_gd")
@@ -379,6 +388,16 @@ material = SubResource("StandardMaterial3D_table")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.81, 0)
 note_contents = "Day 42: The Presence patrols the cold hallways. I hid the old porcelain doll inside the rusted Boiler Room to the West. It is the key to completing the ritual at the North Sacrificial Altar. Do not look directly at her hollow eyes in the dark corridors... she charges when seen."
 
+[node name="HidingSpot" type="Area3D" parent="Props/Room1_Table"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("16_hiding_spot_gd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Room1_Table/HidingSpot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+shape = SubResource("BoxShape3D_hiding_1")
+
+
 [node name="Bookcase1" parent="Props" instance=ExtResource("10_bookcase_tscn")]
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -3.2, 0, 2.5)
 
@@ -469,6 +488,16 @@ material = SubResource("StandardMaterial3D_table")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.35, 0.5)
 size = Vector3(0.08, 0.7, 0.08)
 material = SubResource("StandardMaterial3D_table")
+
+[node name="HidingSpot" type="Area3D" parent="Props/DollTable"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("16_hiding_spot_gd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/DollTable/HidingSpot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+shape = SubResource("BoxShape3D_hiding_2")
+
 
 [node name="Doll" parent="Props" instance=ExtResource("8_doll_tscn")]
 transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, -17, 0.81, -15.8)

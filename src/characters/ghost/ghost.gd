@@ -40,24 +40,34 @@ func _ready() -> void:
 	# Search for AnimationPlayer in the FBX scene and auto-play
 	var anim_player: AnimationPlayer = visual_mesh.find_child("AnimationPlayer", true, false) as AnimationPlayer
 	if anim_player:
-		if anim_player.has_animation("Walk"):
-			anim_player.play("Walk")
-		elif anim_player.has_animation("Crawl"):
-			anim_player.play("Crawl")
+		var anim_name = "mixamo_com"
+		if anim_player.has_animation(anim_name):
+			var anim = anim_player.get_animation(anim_name)
+			if anim:
+				anim.loop_mode = Animation.LOOP_LINEAR
+			anim_player.play(anim_name)
 		elif anim_player.get_animation_list().size() > 0:
-			anim_player.play(anim_player.get_animation_list()[0])
+			var default_anim = anim_player.get_animation_list()[0]
+			var anim = anim_player.get_animation(default_anim)
+			if anim:
+				anim.loop_mode = Animation.LOOP_LINEAR
+			anim_player.play(default_anim)
 
 func _physics_process(delta: float) -> void:
 	_timer += delta
 	if jumpscare_cooldown > 0.0:
 		jumpscare_cooldown -= delta
 	
-	# Floating animation (bobbing up and down procedurally)
-	var bobbing := sin(_timer * 3.0) * 0.15
-	visual_mesh.position.y = bobbing
+	# Make sure visual mesh is aligned with no floating translations or sways
+	visual_mesh.position = Vector3.ZERO
+	visual_mesh.rotation.z = 0.0
 	
-	# Rotational float sway
-	visual_mesh.rotation.z = sin(_timer * 1.5) * 0.08
+	# Apply gravity to ghost so it walks on the floor
+	var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
+	if not is_on_floor():
+		velocity.y -= gravity * delta
+	else:
+		velocity.y = 0.0
 	
 	if not target_player:
 		# Search for player
@@ -79,7 +89,8 @@ func _physics_process(delta: float) -> void:
 			
 		State.AGITATED:
 			# Shaking creepily, screaming
-			velocity = Vector3.ZERO
+			velocity.x = 0
+			velocity.z = 0
 			visual_mesh.rotation.y += sin(_timer * 50.0) * 0.15 # Fast visual shaking
 			_check_eye_contact()
 			
@@ -98,12 +109,16 @@ func _patrol_behavior(delta: float) -> void:
 	var target := _patrol_points[_current_patrol_idx]
 	var dir := (target - global_position).normalized()
 	dir.y = 0 # Remain horizontal
+	if dir.length_squared() > 0.001:
+		dir = dir.normalized()
 	
-	velocity = dir * patrol_speed
+	velocity.x = dir.x * patrol_speed
+	velocity.z = dir.z * patrol_speed
 	move_and_slide()
 	
 	# Rotate towards patrol point
-	if velocity.length_squared() > 0.01:
+	var horiz_vel := Vector2(velocity.x, velocity.z)
+	if horiz_vel.length_squared() > 0.01:
 		var target_rot := atan2(velocity.x, velocity.z)
 		rotation.y = rotate_toward(rotation.y, target_rot, delta * 3.0)
 		
@@ -111,15 +126,25 @@ func _patrol_behavior(delta: float) -> void:
 		_current_patrol_idx = (_current_patrol_idx + 1) % _patrol_points.size()
 
 func _chase_behavior(delta: float) -> void:
+	# If player hides under a table, stop chasing and return to patrol
+	if target_player and target_player.is_hidden:
+		current_state = State.PATROL
+		return
+		
 	var dir := (target_player.global_position - global_position).normalized()
+	dir.y = 0
+	if dir.length_squared() > 0.001:
+		dir = dir.normalized()
 	
-	# Creepy direct flying glide ignoring vertical gravity
-	velocity = dir * chase_speed
+	velocity.x = dir.x * chase_speed
+	velocity.z = dir.z * chase_speed
 	move_and_slide()
 	
 	# Look directly at the player
-	var target_rot := atan2(velocity.x, velocity.z)
-	rotation.y = rotate_toward(rotation.y, target_rot, delta * 8.0)
+	var horiz_vel := Vector2(velocity.x, velocity.z)
+	if horiz_vel.length_squared() > 0.01:
+		var target_rot := atan2(velocity.x, velocity.z)
+		rotation.y = rotate_toward(rotation.y, target_rot, delta * 8.0)
 	
 	# Check distance for scare/damage trigger instead of instakill
 	if global_position.distance_to(target_player.global_position) < 1.3 and jumpscare_cooldown <= 0.0:
@@ -142,6 +167,9 @@ func _chase_behavior(delta: float) -> void:
 
 func _check_eye_contact() -> void:
 	if current_state == State.CHASE:
+		return
+		
+	if target_player and target_player.is_hidden:
 		return
 		
 	# 1. Check if the player is looking towards the ghost
