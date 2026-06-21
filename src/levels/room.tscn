@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="Script" path="res://src/levels/base_level.gd" id="1_base_level_gd"]
 [ext_resource type="PackedScene" path="res://src/characters/player/player.tscn" id="2_player_tscn"]
@@ -10,6 +10,21 @@
 [ext_resource type="PackedScene" path="res://src/items/note.tscn" id="7_note_tscn"]
 [ext_resource type="PackedScene" path="res://src/items/doll.tscn" id="8_doll_tscn"]
 [ext_resource type="PackedScene" path="res://src/characters/ghost/ghost.tscn" id="9_ghost_tscn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(0.6, 0.8, 0.6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_porcelain"]
+albedo_color = Color(0.72, 0.68, 0.65, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dirty_cloth"]
+albedo_color = Color(0.24, 0.2, 0.18, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_black"]
+albedo_color = Color(0.02, 0.02, 0.02, 1)
+roughness = 0.9
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_table"]
 albedo_color = Color(0.2, 0.14, 0.1, 1)
