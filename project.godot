@@ -28,3 +28,7 @@ HorrorMusicSynth="*res://src/autoload/horror_music_synth.gd"
 [rendering]
 
 lights_and_shadows/use_physical_light_units=true
+
+[debug]
+
+gdscript/warnings/unused_signal=0
