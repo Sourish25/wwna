@@ -10,6 +10,7 @@ extends CharacterBody3D
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var camera: Camera3D = $CameraPivot/Camera3D
 @onready var health_component: HealthComponent = $HealthComponent
+@onready var flashlight: SpotLight3D = $CameraPivot/Camera3D/SpotLight3D
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
@@ -32,6 +33,13 @@ func _unhandled_input(event: InputEvent) -> void:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+	# Flashlight on/off check
+	var is_toggle_key := event is InputEventKey and event.pressed and event.keycode == KEY_F and not event.echo
+	if event.is_action_pressed("toggle_flashlight") or is_toggle_key:
+		if flashlight:
+			flashlight.visible = not flashlight.visible
+			AudioSynth.play_flashlight_click(self)
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
