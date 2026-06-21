@@ -1,0 +1,19 @@
+# Godot-specific ignores
+.godot/
+*.translation
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash*.trc
+
+# System / IDE ignores
+.import/
+export_presets.cfg
+.vscode/
+.idea/
+*.uid
+
+# Windows system files
+Thumbs.db
+Desktop.ini

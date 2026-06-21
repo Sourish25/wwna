@@ -1,0 +1,25 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assigns value to param
+
+config_version=5
+
+[application]
+
+config/name="We Were Not Alone"
+config/features=PackedStringArray("4.2", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+EventBus="*res://src/autoload/event_bus.gd"
+GameManager="*res://src/autoload/game_manager.gd"
+
+[rendering]
+
+renderer/rendering_method="forward_plus"
+lights_and_shadows/use_physical_light_units=true
