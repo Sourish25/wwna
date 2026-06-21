@@ -14,5 +14,12 @@ func _ready() -> void:
 func _on_interact(player: Player) -> void:
 	# Find HUD and display the note contents
 	var hud = player.get_node_or_null("HUD")
+	if not hud:
+		var parent = player.get_parent()
+		if parent:
+			hud = parent.get_node_or_null("HUD")
+	if not hud:
+		hud = player.get_tree().root.find_child("HUD", true, false)
+		
 	if hud and hud.has_method("show_note"):
 		hud.show_note(note_contents)

@@ -16,11 +16,11 @@ func _ready() -> void:
 	if player:
 		player.add_to_group("player")
 		
-	# Spawn HUD in player
+	# Spawn HUD in level root
 	var hud_scene := load("res://src/ui/hud.tscn")
-	if hud_scene and player:
+	if hud_scene:
 		var hud = hud_scene.instantiate()
-		player.add_child(hud)
+		add_child(hud)
 		hud.name = "HUD"
 		
 	EventBus.player_died.connect(_on_player_died)

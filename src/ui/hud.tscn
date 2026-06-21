@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://src/ui/hud.gd" id="1_hud_gd"]
+[ext_resource type="Shader" path="res://src/ui/retro_horror.gdshader" id="2_retro_shader"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_prompt"]
 font_size = 18
@@ -22,11 +23,30 @@ font_size = 20
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_retro"]
+shader = ExtResource("2_retro_shader")
+shader_parameter/pixel_size = 3.0
+shader_parameter/color_depth = 8.0
+shader_parameter/scanline_strength = 0.25
+shader_parameter/vignette_intensity = 1.2
+shader_parameter/vignette_opacity = 0.85
+shader_parameter/noise_strength = 0.015
+
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud_gd")
 
 [node name="HUDControl" type="Control" parent="."]
 layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RetroPostProcess" type="ColorRect" parent="HUDControl"]
+material = SubResource("ShaderMaterial_retro")
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
