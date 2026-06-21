@@ -38,6 +38,13 @@ func _ready() -> void:
 	if ghost:
 		ghost.visible = false
 		ghost.current_state = Ghost.State.DORMANT
+		
+	# Trigger opening story dialog
+	_trigger_opening_dialog()
+
+func _trigger_opening_dialog() -> void:
+	await get_tree().create_timer(1.2).timeout
+	EventBus.dialog_triggered.emit("Where... where am I? This place is freezing. I need to get out.", 4.0, "res://assets/audio/dialog/start_dialog.mp3")
 
 func _on_doll_picked_up() -> void:
 	# Wake up the presence!
@@ -49,12 +56,11 @@ func _on_altar_interacted(player: Player) -> void:
 		player.has_doll = false
 		if altar_doll_mesh:
 			altar_doll_mesh.visible = true
+		EventBus.dialog_triggered.emit("The sacrifice is complete. The presence is fading. I am free.", 5.0, "res://assets/audio/dialog/victory_dialog.mp3")
 		# Trigger Level Victory via EventBus
 		EventBus.level_completed.emit(level_name)
 	else:
-		EventBus.interaction_prompted.emit("The Altar demands a vessel...")
-		await get_tree().create_timer(2.5).timeout
-		EventBus.interaction_cleared.emit()
+		EventBus.dialog_triggered.emit("The Altar demands a vessel...", 3.0, "res://assets/audio/dialog/altar_need_doll.mp3")
 
 func _on_player_died() -> void:
 	# Disable processing

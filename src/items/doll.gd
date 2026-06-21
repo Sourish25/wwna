@@ -22,6 +22,7 @@ func _on_interact(player: Player) -> void:
 	
 	# Trigger the EventBus level change or spawn ghost
 	EventBus.interaction_prompted.emit("Something has awakened...")
+	EventBus.dialog_triggered.emit("The porcelain doll. It's so cold... I feel a presence watching me.", 4.5, "res://assets/audio/dialog/doll_dialog.mp3")
 	await get_tree().create_timer(2.0).timeout
 	EventBus.interaction_cleared.emit()
 	

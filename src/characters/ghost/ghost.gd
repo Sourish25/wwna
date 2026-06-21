@@ -21,6 +21,7 @@ var _current_patrol_idx: int = 0
 var _base_y: float = 0.0
 
 func _ready() -> void:
+	add_to_group("ghost")
 	_base_y = global_position.y
 	# Setup patrol points around the main facility corridors
 	_patrol_points = [
@@ -137,33 +138,36 @@ func _check_eye_contact() -> void:
 				_play_shriek_noise()
 
 func _play_shriek_noise() -> void:
-	# Generate a creepy high-pitch audio scream procedurally!
 	var player := AudioStreamPlayer3D.new()
 	add_child(player)
 	player.global_position = global_position
 	
-	var generator := AudioStreamGenerator.new()
-	generator.mix_rate = 22050
-	generator.buffer_length = 0.8
-	
-	player.stream = generator
-	player.play()
-	
-	var playback: AudioStreamGeneratorPlayback = player.get_stream_playback()
-	if playback:
-		var sample_rate: float = 22050.0
-		var frames := int(sample_rate * 0.8) # 0.8 seconds
-		for i in range(frames):
-			var t := float(i) / sample_rate
-			# Screeching high-pitch frequency modulation
-			var freq := 800.0 + sin(2.0 * PI * 80.0 * t) * 300.0
-			var osc := sin(2.0 * PI * freq * t) * 0.3 * exp(-3.0 * t)
-			# Add harsh static noise
-			var noise := (randf() * 2.0 - 1.0) * 0.15 * exp(-1.5 * t)
-			var sample := clamp(osc + noise, -1.0, 1.0)
-			playback.push_frame(Vector2(sample, sample))
-			
-	await player.finished
+	# Load the downloaded Wikimedia horror laugh sound effect
+	var sfx := load("res://assets/audio/sfx/ghost_laugh.ogg")
+	if sfx:
+		player.stream = sfx
+		player.play()
+		await player.finished
+	else:
+		# Fallback procedural synthesis scream
+		var generator := AudioStreamGenerator.new()
+		generator.mix_rate = 22050
+		generator.buffer_length = 0.8
+		player.stream = generator
+		player.play()
+		var playback: AudioStreamGeneratorPlayback = player.get_stream_playback()
+		if playback:
+			var sample_rate: float = 22050.0
+			var frames := int(sample_rate * 0.8)
+			for i in range(frames):
+				var t := float(i) / sample_rate
+				var freq := 800.0 + sin(2.0 * PI * 80.0 * t) * 300.0
+				var osc := sin(2.0 * PI * freq * t) * 0.3 * exp(-3.0 * t)
+				var noise := (randf() * 2.0 - 1.0) * 0.15 * exp(-1.5 * t)
+				var sample := clamp(osc + noise, -1.0, 1.0)
+				playback.push_frame(Vector2(sample, sample))
+		await player.finished
+		
 	player.queue_free()
 
 func trigger_spawn() -> void:

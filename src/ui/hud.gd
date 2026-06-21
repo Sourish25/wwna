@@ -8,21 +8,30 @@ extends CanvasLayer
 @onready var jumpscare_overlay: ColorRect = $HUDControl/JumpscareOverlay
 @onready var jumpscare_text: Label = $HUDControl/JumpscareOverlay/JumpscareText
 @onready var victory_overlay: ColorRect = $HUDControl/VictoryOverlay
+@onready var subtitle_label: Label = $HUDControl/SubtitleLabel
 
 var _is_reading: bool = false
 var _active_note_text: String = ""
+var dialog_audio_player: AudioStreamPlayer
 
 func _ready() -> void:
+	# Create dialog audio player dynamically
+	dialog_audio_player = AudioStreamPlayer.new()
+	dialog_audio_player.bus = &"Master"
+	add_child(dialog_audio_player)
+	
 	# Register UI nodes to the EventBus or listen to custom interactions
 	EventBus.interaction_prompted.connect(_on_interaction_prompted)
 	EventBus.interaction_cleared.connect(_on_interaction_cleared)
 	EventBus.player_died.connect(_on_player_died)
 	EventBus.level_completed.connect(_on_victory)
+	EventBus.dialog_triggered.connect(_on_dialog_triggered)
 	
 	prompt_label.text = ""
 	note_overlay.visible = false
 	jumpscare_overlay.visible = false
 	victory_overlay.visible = false
+	subtitle_label.text = ""
 
 func _unhandled_input(event: InputEvent) -> void:
 	if _is_reading and (event.is_action_pressed("ui_accept") or (event is InputEventKey and event.pressed and event.keycode == KEY_E)):
@@ -73,3 +82,25 @@ func _on_victory(_level_name: String) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	await get_tree().create_timer(6.0).timeout
 	get_tree().quit()
+
+func _on_dialog_triggered(text: String, duration: float, audio_path: String = "") -> void:
+	subtitle_label.text = text
+	subtitle_label.modulate.a = 0.0
+	var tween := create_tween()
+	tween.tween_property(subtitle_label, "modulate:a", 1.0, 0.35)
+	
+	# Play dialog voice line if path is provided
+	if dialog_audio_player:
+		dialog_audio_player.stop()
+		if audio_path != "" and FileAccess.file_exists(audio_path):
+			var stream = load(audio_path)
+			if stream:
+				dialog_audio_player.stream = stream
+				dialog_audio_player.play()
+	
+	await get_tree().create_timer(duration).timeout
+	
+	# Fade out only if subtitle text hasn't been changed by a newer dialog
+	if subtitle_label.text == text:
+		var fade := create_tween()
+		fade.tween_property(subtitle_label, "modulate:a", 0.0, 0.45)

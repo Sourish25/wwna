@@ -14,6 +14,8 @@ extends CharacterBody3D
 
 var has_doll: bool = false
 var _active_interactable: Interactable = null
+var heartbeat_player: AudioStreamPlayer
+var _ghost_node: Ghost = null
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
@@ -24,6 +26,18 @@ func _ready() -> void:
 	if health_component:
 		health_component.died.connect(_on_death)
 		health_component.health_changed.connect(_on_health_changed)
+		
+	# Setup heartbeat player
+	heartbeat_player = AudioStreamPlayer.new()
+	heartbeat_player.bus = &"Master"
+	add_child(heartbeat_player)
+	var hb_sfx := load("res://assets/audio/sfx/heartbeat.ogg")
+	if hb_sfx:
+		heartbeat_player.stream = hb_sfx
+		if heartbeat_player.stream.has_method("set_loop"):
+			heartbeat_player.stream.set_loop(true)
+		elif "loop" in heartbeat_player.stream:
+			heartbeat_player.stream.loop = true
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -88,6 +102,7 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	_process_interaction()
+	_process_heartbeat()
 
 func _process_interaction() -> void:
 	var space_state := get_world_3d().direct_space_state
@@ -119,6 +134,52 @@ func _on_health_changed(current: int, max_health: int) -> void:
 	EventBus.player_health_changed.emit(current, max_health)
 
 func _on_death() -> void:
+	HorrorMusicSynth.play_sfx("res://assets/audio/sfx/death_scream.ogg")
 	EventBus.player_died.emit()
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	queue_free()
+
+func _process_heartbeat() -> void:
+	if not heartbeat_player:
+		return
+		
+	if not _ghost_node:
+		var ghosts := get_tree().get_nodes_in_group("ghost")
+		if ghosts.size() > 0:
+			_ghost_node = ghosts[0] as Ghost
+		else:
+			var parent = get_parent()
+			if parent:
+				_ghost_node = parent.get_node_or_null("Ghost") as Ghost
+	
+	if not _ghost_node or not _ghost_node.visible or _ghost_node.current_state == Ghost.State.DORMANT:
+		if heartbeat_player.playing:
+			heartbeat_player.stop()
+		return
+		
+	var dist := global_position.distance_to(_ghost_node.global_position)
+	var max_hear_distance: float = 18.0
+	
+	if dist < max_hear_distance:
+		if not heartbeat_player.playing:
+			heartbeat_player.play()
+			
+		# Proximity-based volume ratio (1.0 close, 0.0 far)
+		var volume_ratio := 1.0 - (dist / max_hear_distance)
+		
+		# Heartbeat intensity boost if ghost is actively chasing the player
+		if _ghost_node.current_state == Ghost.State.CHASE:
+			volume_ratio = clamp(volume_ratio + 0.25, 0.0, 1.0)
+			heartbeat_player.pitch_scale = 1.35
+		else:
+			heartbeat_player.pitch_scale = 1.0
+			
+		volume_ratio = volume_ratio * 0.85 # Max volume safety limit
+		
+		if volume_ratio > 0.01:
+			heartbeat_player.volume_db = linear_to_db(volume_ratio)
+		else:
+			heartbeat_player.volume_db = -80.0
+	else:
+		if heartbeat_player.playing:
+			heartbeat_player.stop()
