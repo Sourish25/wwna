@@ -1,0 +1,78 @@
+[gd_scene format=4]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ubqwa"]
+resource_name = "Material.007"
+vertex_color_use_as_albedo = true
+emission_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xk4sv"]
+resource_name = "Bookcase"
+vertex_color_use_as_albedo = true
+emission_enabled = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_t2i5j"]
+_surfaces = [{
+"aabb": AABB(-0.012503314, -0.0030553683, -0.018812634, 0.025006644, 0.006110709, 0.026190553),
+"format": 34359742465,
+"index_count": 30,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAQAAAAQAAwACAAUABQACAAEABQAGAAMABAAHAAEAAQAHAAUABwAEAAYABgAFAAcA"),
+"name": "Material.007",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("s9pMvB08SDt3wvE7s9pMvJM8SLt3wvE7s9pMvJM8SLv0HJq8s9pMvB08SDv0HJq8xtpMPB08SDt3wvE7xtpMPJM8SLv0HJq8xtpMPB08SDv0HJq8xtpMPJM8SLt3wvE7")
+}, {
+"aabb": AABB(-0.012503314, 0.0030553408, -0.018812634, 0.025006644, 1e-05, 0.026190553),
+"format": 34359742465,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAgADAAAA"),
+"name": "Bookcase",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("xtpMPB08SDt3wvE7s9pMvB08SDt3wvE7s9pMvB08SDv0HJq8xtpMPB08SDv0HJq8")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_c2bm1"]
+resource_name = "Cube_135"
+_surfaces = [{
+"aabb": AABB(-0.012503314, -0.0030553683, -0.018812634, 0.025006644, 0.006110709, 0.026190553),
+"attribute_data": PackedByteArray("Z/MSP7yYuD6RbOE+vJi4PpFs4T5CDG8/Z/MSP0IMbz+RbOE+vJi4PmfzEj+8mLg+Z/MSP0IMbz+RbOE+QgxvPyYYbz68mLg+p+NHP7yYuD6n40c/QgxvPyYYbz5CDG8/p+NHP+zBFj+n40c/GAnpPiYYbz4YCek+JhhvPuzBFj8mGG8+7MEWPyYYbz4YCek+p+NHPxgJ6T6n40c/7MEWPw=="),
+"format": 34359742487,
+"index_count": 30,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwAEAARABIAEgATABAA"),
+"material": SubResource("StandardMaterial3D_ubqwa"),
+"name": "Material.007",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 20,
+"vertex_data": PackedByteArray("s9pMvB08SDt3wvE7s9pMvJM8SLt3wvE7s9pMvJM8SLv0HJq8s9pMvB08SDv0HJq8xtpMPJM8SLt3wvE7xtpMPB08SDt3wvE7xtpMPB08SDv0HJq8xtpMPJM8SLv0HJq8s9pMvJM8SLt3wvE7xtpMPJM8SLt3wvE7xtpMPJM8SLv0HJq8s9pMvJM8SLv0HJq8xtpMPJM8SLv0HJq8xtpMPB08SDv0HJq8s9pMvB08SDv0HJq8s9pMvJM8SLv0HJq8s9pMvJM8SLt3wvE7s9pMvB08SDt3wvE7xtpMPB08SDt3wvE7xtpMPJM8SLt3wvE7AAD/f/9/AAAAAP9//38AAAAA/3//fwAAAAD/f/9/AAD///9//3///////3//f///////f/9///////9//3////9/AAD///+//38AAP///7//fwAA////v/9/AAD///+//////////z//////////P/////////8//////////z//f/9/////v/9//3////+//3//f////7//f/9/////vw==")
+}, {
+"aabb": AABB(-0.012503314, 0.0030553408, -0.018812634, 0.025006644, 1e-05, 0.026190553),
+"attribute_data": PackedByteArray("GXz9PgBXcDtgc9g7AFdwO2Bz2Du81vo+GXz9PrzW+j4="),
+"format": 34359742487,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAgADAAAA"),
+"material": SubResource("StandardMaterial3D_xk4sv"),
+"name": "Bookcase",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("xtpMPB08SDt3wvE7s9pMvB08SDt3wvE7s9pMvB08SDv0HJq8xtpMPB08SDv0HJq8/3///////z//f///////P/9///////8//3///////z8=")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_t2i5j")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_yyq6m"]
+points = PackedVector3Array(0.012503331, 0.0030553408, 0.007377919, 0.012503331, -0.0030553683, 0.007377919, 0.012503331, 0.0030553408, -0.018812634, -0.012503314, 0.0030553408, 0.007377919, -0.012503314, -0.0030553683, 0.007377919, 0.012503331, -0.0030553683, -0.018812634, -0.012503314, 0.0030553408, -0.018812634, -0.012503314, -0.0030553683, -0.018812634)
+
+[node name="Bookcase" type="StaticBody3D" unique_id=1557011831]
+
+[node name="MeshInstance" type="MeshInstance3D" parent="." unique_id=450401377]
+mesh = SubResource("ArrayMesh_c2bm1")
+surface_material_override/0 = SubResource("StandardMaterial3D_ubqwa")
+surface_material_override/1 = SubResource("StandardMaterial3D_xk4sv")
+
+[node name="CollisionShape" type="CollisionShape3D" parent="." unique_id=1965180810]
+shape = SubResource("ConvexPolygonShape3D_yyq6m")

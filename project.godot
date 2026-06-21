@@ -25,10 +25,14 @@ EventBus="*res://src/autoload/event_bus.gd"
 GameManager="*res://src/autoload/game_manager.gd"
 HorrorMusicSynth="*res://src/autoload/horror_music_synth.gd"
 
-[rendering]
-
-lights_and_shadows/use_physical_light_units=true
-
 [debug]
 
 gdscript/warnings/unused_signal=0
+
+[filesystem]
+
+import/blender/enabled=false
+
+[rendering]
+
+lights_and_shadows/use_physical_light_units=true

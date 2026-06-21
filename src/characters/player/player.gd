@@ -16,6 +16,7 @@ var has_doll: bool = false
 var _active_interactable: Interactable = null
 var heartbeat_player: AudioStreamPlayer
 var _ghost_node: Ghost = null
+var is_flashlight_enabled: bool = true
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
@@ -63,7 +64,8 @@ func _input(event: InputEvent) -> void:
 		
 	if event.is_action_pressed("toggle_flashlight") or is_toggle_key:
 		if flashlight:
-			flashlight.visible = not flashlight.visible
+			is_flashlight_enabled = not is_flashlight_enabled
+			flashlight.visible = is_flashlight_enabled
 			AudioSynth.play_flashlight_click(self)
 
 	# E key Interaction check
@@ -81,7 +83,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= gravity * delta
 
 	# Handle Jump.
-	var is_jumping := Input.is_action_just_pressed("jump") or Input.is_key_pressed(KEY_SPACE)
+	var is_jumping := (InputMap.has_action("jump") and Input.is_action_just_pressed("jump")) or Input.is_key_pressed(KEY_SPACE)
 	if is_jumping and is_on_floor():
 		velocity.y = jump_velocity
 
@@ -163,6 +165,8 @@ func _process_heartbeat() -> void:
 	if not _ghost_node or not _ghost_node.visible or _ghost_node.current_state == Ghost.State.DORMANT:
 		if heartbeat_player.playing:
 			heartbeat_player.stop()
+		if flashlight:
+			flashlight.visible = is_flashlight_enabled
 		return
 		
 	var dist := global_position.distance_to(_ghost_node.global_position)
@@ -188,6 +192,17 @@ func _process_heartbeat() -> void:
 			heartbeat_player.volume_db = linear_to_db(volume_ratio)
 		else:
 			heartbeat_player.volume_db = -80.0
+			
+		# Proximity flashlight flicker
+		if dist < 12.0:
+			if flashlight and is_flashlight_enabled:
+				if randf() < 0.12:
+					flashlight.visible = not flashlight.visible
+		else:
+			if flashlight:
+				flashlight.visible = is_flashlight_enabled
 	else:
 		if heartbeat_player.playing:
 			heartbeat_player.stop()
+		if flashlight:
+			flashlight.visible = is_flashlight_enabled

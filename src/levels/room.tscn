@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="Script" path="res://src/levels/base_level.gd" id="1_base_level_gd"]
 [ext_resource type="PackedScene" path="res://src/characters/player/player.tscn" id="2_player_tscn"]
@@ -10,6 +10,12 @@
 [ext_resource type="PackedScene" path="res://src/items/note.tscn" id="7_note_tscn"]
 [ext_resource type="PackedScene" path="res://src/items/doll.tscn" id="8_doll_tscn"]
 [ext_resource type="PackedScene" path="res://src/characters/ghost/ghost.tscn" id="9_ghost_tscn"]
+[ext_resource type="PackedScene" path="res://assets/models/extracted/bookcase.tscn" id="10_bookcase_tscn"]
+[ext_resource type="PackedScene" path="res://assets/models/extracted/crate_small.tscn" id="11_crate_small_tscn"]
+[ext_resource type="PackedScene" path="res://assets/models/extracted/crate_large.tscn" id="12_crate_large_tscn"]
+[ext_resource type="PackedScene" path="res://assets/models/extracted/cart.tscn" id="13_cart_tscn"]
+[ext_resource type="PackedScene" path="res://assets/models/extracted/trash_can.tscn" id="14_trash_can_tscn"]
+[ext_resource type="PackedScene" path="res://assets/models/extracted/toilet.tscn" id="15_toilet_tscn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1"]
 size = Vector3(0.6, 0.8, 0.6)
@@ -373,88 +379,17 @@ material = SubResource("StandardMaterial3D_table")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.81, 0)
 note_contents = "Day 42: The Presence patrols the cold hallways. I hid the old porcelain doll inside the rusted Boiler Room to the West. It is the key to completing the ritual at the North Sacrificial Altar. Do not look directly at her hollow eyes in the dark corridors... she charges when seen."
 
-[node name="Locker" type="CSGBox3D" parent="Props"]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -3.2, 0.9, 2.5)
-use_collision = true
-size = Vector3(0.8, 1.8, 0.8)
-material = SubResource("StandardMaterial3D_metal")
+[node name="Bookcase1" parent="Props" instance=ExtResource("10_bookcase_tscn")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -3.2, 0, 2.5)
 
-[node name="TippedChair" type="Node3D" parent="Props"]
-transform = Transform3D(0.6697, 0.697472, -0.252607, -0.730248, 0.68069, 0.0580126, 0.130386, 0.150493, 0.979963, 1.2, 0.22, -0.6)
+[node name="Hallway_Obstacle" parent="Props" instance=ExtResource("12_crate_large_tscn")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0.45, 0, -7.5)
 
-[node name="Seat" type="CSGBox3D" parent="Props/TippedChair"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
-size = Vector3(0.5, 0.05, 0.5)
-material = SubResource("StandardMaterial3D_table")
-
-[node name="Leg_1" type="CSGBox3D" parent="Props/TippedChair"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, -0.2)
-size = Vector3(0.05, 0.4, 0.05)
-material = SubResource("StandardMaterial3D_table")
-
-[node name="Leg_2" type="CSGBox3D" parent="Props/TippedChair"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0, -0.2)
-size = Vector3(0.05, 0.4, 0.05)
-material = SubResource("StandardMaterial3D_table")
-
-[node name="Leg_3" type="CSGBox3D" parent="Props/TippedChair"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, 0.2)
-size = Vector3(0.05, 0.4, 0.05)
-material = SubResource("StandardMaterial3D_table")
-
-[node name="Leg_4" type="CSGBox3D" parent="Props/TippedChair"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0, 0.2)
-size = Vector3(0.05, 0.4, 0.05)
-material = SubResource("StandardMaterial3D_table")
-
-[node name="Back" type="CSGBox3D" parent="Props/TippedChair"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.2)
-size = Vector3(0.5, 0.5, 0.05)
-material = SubResource("StandardMaterial3D_table")
-
-[node name="Hallway_Obstacle" type="CSGBox3D" parent="Props"]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0.45, 0.35, -7.5)
-use_collision = true
-size = Vector3(0.7, 0.7, 0.7)
-material = SubResource("StandardMaterial3D_table")
-
-[node name="Shelf_Left" type="CSGCombiner3D" parent="Props"]
+[node name="Bookcase_Left" parent="Props" instance=ExtResource("10_bookcase_tscn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3, 0, -16)
-use_collision = true
 
-[node name="Back" type="CSGBox3D" parent="Props/Shelf_Left"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 1.1, 0)
-size = Vector3(0.1, 2.2, 2)
-material = SubResource("StandardMaterial3D_metal")
-
-[node name="Shelf1" type="CSGBox3D" parent="Props/Shelf_Left"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.7, 0)
-size = Vector3(0.6, 0.05, 2)
-material = SubResource("StandardMaterial3D_metal")
-
-[node name="Shelf2" type="CSGBox3D" parent="Props/Shelf_Left"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 1.4, 0)
-size = Vector3(0.6, 0.05, 2)
-material = SubResource("StandardMaterial3D_metal")
-
-[node name="Shelf_Right" type="CSGCombiner3D" parent="Props"]
+[node name="Bookcase_Right" parent="Props" instance=ExtResource("10_bookcase_tscn")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 4.3, 0, -16)
-use_collision = true
-
-[node name="Back" type="CSGBox3D" parent="Props/Shelf_Right"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 1.1, 0)
-size = Vector3(0.1, 2.2, 2)
-material = SubResource("StandardMaterial3D_metal")
-
-[node name="Shelf1" type="CSGBox3D" parent="Props/Shelf_Right"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.7, 0)
-size = Vector3(0.6, 0.05, 2)
-material = SubResource("StandardMaterial3D_metal")
-
-[node name="Shelf2" type="CSGBox3D" parent="Props/Shelf_Right"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 1.4, 0)
-size = Vector3(0.6, 0.05, 2)
-material = SubResource("StandardMaterial3D_metal")
 
 [node name="CreepyPillar" type="CSGBox3D" parent="Props"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, -19)
@@ -462,17 +397,23 @@ use_collision = true
 size = Vector3(0.4, 2.5, 0.4)
 material = ExtResource("5_wall_material_tres")
 
-[node name="Box1" type="CSGBox3D" parent="Props"]
-transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -3.5, 0.3, -18.5)
-use_collision = true
-size = Vector3(0.6, 0.6, 0.6)
-material = SubResource("StandardMaterial3D_table")
+[node name="Box1" parent="Props" instance=ExtResource("12_crate_large_tscn")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -3.5, 0, -18.5)
 
-[node name="Box2" type="CSGBox3D" parent="Props"]
-transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -3.4, 0.8, -18.4)
-use_collision = true
-size = Vector3(0.5, 0.5, 0.5)
-material = SubResource("StandardMaterial3D_table")
+[node name="Box2" parent="Props" instance=ExtResource("11_crate_small_tscn")]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -3.4, 0.6, -18.4)
+
+[node name="TrashCan1" parent="Props" instance=ExtResource("14_trash_can_tscn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -3)
+
+[node name="TrashCan2" parent="Props" instance=ExtResource("14_trash_can_tscn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -19)
+
+[node name="Cart" parent="Props" instance=ExtResource("13_cart_tscn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -14)
+
+[node name="Toilet" parent="Props" instance=ExtResource("15_toilet_tscn")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20, 0, -19)
 
 [node name="Boiler1" type="CSGCylinder3D" parent="Props"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 1.1, -13)

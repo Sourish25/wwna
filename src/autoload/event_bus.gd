@@ -28,3 +28,5 @@ signal interaction_cleared
 signal game_paused(is_paused: bool)
 @warning_ignore("unused_signal")
 signal dialog_triggered(text: String, duration: float, audio_path: String)
+@warning_ignore("unused_signal")
+signal scare_triggered(duration: float)

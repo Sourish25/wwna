@@ -1,29 +1,13 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://hcnh22uml4p6"]
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://hcnh22uml4p6"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_noise"]
-noise_type = 2
-frequency = 0.05
-fractal_type = 2
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_albedo"]
-noise = SubResource("FastNoiseLite_noise")
-seamless = true
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_bump"]
-noise_type = 0
-frequency = 0.1
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_normal"]
-noise = SubResource("FastNoiseLite_bump")
-seamless = true
-as_normal_map = true
-bump_strength = 3.0
+[ext_resource type="Texture2D" path="res://assets/textures/Industrial_exterior_v2/Textures/Concrete.png" id="1_concrete_png"]
+[ext_resource type="Texture2D" path="res://assets/textures/Industrial_exterior_v2/Textures/Concrete_n.png" id="2_concrete_n_png"]
 
 [resource]
-albedo_color = Color(0.08, 0.08, 0.07, 1)
-albedo_texture = SubResource("NoiseTexture2D_albedo")
-roughness = 0.9
+albedo_color = Color(0.35, 0.35, 0.35, 1)
+albedo_texture = ExtResource("1_concrete_png")
+roughness = 0.95
 normal_enabled = true
-normal_texture = SubResource("NoiseTexture2D_normal")
-uv1_scale = Vector3(0.4, 0.4, 0.4)
+normal_texture = ExtResource("2_concrete_n_png")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
 uv1_triplanar = true

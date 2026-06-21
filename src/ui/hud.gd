@@ -29,6 +29,7 @@ func _ready() -> void:
 	EventBus.player_died.connect(_on_player_died)
 	EventBus.level_completed.connect(_on_victory)
 	EventBus.dialog_triggered.connect(_on_dialog_triggered)
+	EventBus.scare_triggered.connect(_on_scare_triggered)
 	
 	prompt_label.text = ""
 	note_overlay.visible = false
@@ -113,3 +114,34 @@ func _on_dialog_triggered(text: String, duration: float, audio_path: String) -> 
 	if subtitle_label.text == text:
 		var fade := create_tween()
 		fade.tween_property(subtitle_label, "modulate:a", 0.0, 0.45)
+
+func _on_scare_triggered(duration: float) -> void:
+	if not jumpscare_overlay or not jumpscare_text:
+		return
+	
+	jumpscare_overlay.visible = true
+	jumpscare_overlay.color = Color(0.65, 0.02, 0.02, 0.9)
+	jumpscare_text.text = "RUN"
+	jumpscare_text.modulate.a = 1.0
+	
+	# Quickly shake the camera pivot if player camera pivot is accessible
+	var players := get_tree().get_nodes_in_group("player")
+	if players.size() > 0:
+		var player = players[0] as Player
+		if player and player.camera_pivot:
+			var orig_pos = player.camera_pivot.position
+			var shake_tween = create_tween()
+			for i in range(6):
+				var offset = Vector3(randf_range(-0.15, 0.15), randf_range(-0.15, 0.15), randf_range(-0.15, 0.15))
+				shake_tween.tween_property(player.camera_pivot, "position", orig_pos + offset, 0.04)
+			shake_tween.tween_property(player.camera_pivot, "position", orig_pos, 0.04)
+			
+	# Fade overlay out
+	var fade_tween = create_tween()
+	fade_tween.tween_property(jumpscare_overlay, "color", Color(0, 0, 0, 0), duration)
+	fade_tween.parallel().tween_property(jumpscare_text, "modulate:a", 0.0, duration)
+	
+	await fade_tween.finished
+	# Hide if a new permanent jumpscare isn't active
+	if jumpscare_overlay.color.a < 0.02:
+		jumpscare_overlay.visible = false

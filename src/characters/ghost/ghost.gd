@@ -6,7 +6,7 @@ extends CharacterBody3D
 enum State { DORMANT, PATROL, AGITATED, CHASE }
 
 @export var patrol_speed: float = 1.0
-@export var chase_speed: float = 3.6
+@export var chase_speed: float = 2.8
 @export var eye_contact_threshold: float = 0.72 # FOV angle dot product
 @export var target_player: Player
 
@@ -14,6 +14,7 @@ enum State { DORMANT, PATROL, AGITATED, CHASE }
 @onready var raycast: RayCast3D = $RayCast3D
 
 var current_state: State = State.DORMANT
+var jumpscare_cooldown: float = 0.0
 var _timer: float = 0.0
 var _shriek_timer: float = 0.0
 var _patrol_points: Array[Vector3] = []
@@ -30,9 +31,26 @@ func _ready() -> void:
 		Vector3(-9, _base_y, -16),
 		Vector3(0, _base_y, -24),
 	]
+	
+	# Load and assign monster material to all MeshInstance3D nodes in the model
+	var mat := load("res://assets/materials/monster_material.tres") as Material
+	if mat:
+		_apply_material_to_meshes(visual_mesh, mat)
+		
+	# Search for AnimationPlayer in the FBX scene and auto-play
+	var anim_player: AnimationPlayer = visual_mesh.find_child("AnimationPlayer", true, false) as AnimationPlayer
+	if anim_player:
+		if anim_player.has_animation("Walk"):
+			anim_player.play("Walk")
+		elif anim_player.has_animation("Crawl"):
+			anim_player.play("Crawl")
+		elif anim_player.get_animation_list().size() > 0:
+			anim_player.play(anim_player.get_animation_list()[0])
 
 func _physics_process(delta: float) -> void:
 	_timer += delta
+	if jumpscare_cooldown > 0.0:
+		jumpscare_cooldown -= delta
 	
 	# Floating animation (bobbing up and down procedurally)
 	var bobbing := sin(_timer * 3.0) * 0.15
@@ -103,10 +121,24 @@ func _chase_behavior(delta: float) -> void:
 	var target_rot := atan2(velocity.x, velocity.z)
 	rotation.y = rotate_toward(rotation.y, target_rot, delta * 8.0)
 	
-	# Check distance for kill trigger
-	if global_position.distance_to(target_player.global_position) < 1.3:
-		# Jump-scare and kill player
-		target_player.take_damage(100) # Instakill
+	# Check distance for scare/damage trigger instead of instakill
+	if global_position.distance_to(target_player.global_position) < 1.3 and jumpscare_cooldown <= 0.0:
+		jumpscare_cooldown = 4.0 # 4 second cooldown
+		
+		# Play terrifying shriek
+		_play_shriek_noise()
+		
+		# Trigger HUD jumpscare overlay red flash for 0.6 seconds
+		EventBus.scare_triggered.emit(0.6)
+		
+		# Deal 40 damage (allows player to survive multiple catch events)
+		target_player.take_damage(40)
+		
+		# Teleport ghost to the farthest patrol point
+		teleport_away()
+		
+		# Return to patrol state to reset chase
+		current_state = State.PATROL
 
 func _check_eye_contact() -> void:
 	if current_state == State.CHASE:
@@ -173,3 +205,22 @@ func _play_shriek_noise() -> void:
 func trigger_spawn() -> void:
 	current_state = State.PATROL
 	visible = true
+
+func teleport_away() -> void:
+	if _patrol_points.is_empty() or not target_player:
+		return
+	var best_point := global_position
+	var max_dist := 0.0
+	for p in _patrol_points:
+		var d := p.distance_to(target_player.global_position)
+		if d > max_dist:
+			max_dist = d
+			best_point = p
+	global_position = best_point
+	velocity = Vector3.ZERO
+
+func _apply_material_to_meshes(node: Node, mat: Material) -> void:
+	if node is MeshInstance3D:
+		node.material_override = mat
+	for child in node.get_children():
+		_apply_material_to_meshes(child, mat)
