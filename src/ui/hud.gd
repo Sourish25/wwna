@@ -174,7 +174,7 @@ func _on_victory(_level_name: String) -> void:
 	# Leave mouse visible
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	await get_tree().create_timer(6.0).timeout
-	get_tree().quit()
+	get_tree().change_scene_to_file("res://src/ui/main_menu.tscn")
 
 func _on_dialog_triggered(text: String, duration: float, audio_path: String) -> void:
 	subtitle_label.text = text

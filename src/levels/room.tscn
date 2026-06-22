@@ -107,12 +107,22 @@ use_collision = true
 size = Vector3(0.2, 3, 8)
 material = ExtResource("5_wall_material_tres")
 
+
+[node name="Room1_Wall_East_Cut" type="CSGBox3D" parent="Geometry/Room1_Wall_East"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+operation = 2
+size = Vector3(1, 2.5, 2)
 [node name="Room1_Wall_West" type="CSGBox3D" parent="Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.5, 0)
 use_collision = true
 size = Vector3(0.2, 3, 8)
 material = ExtResource("5_wall_material_tres")
 
+
+[node name="Room1_Wall_West_Cut" type="CSGBox3D" parent="Geometry/Room1_Wall_West"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+operation = 2
+size = Vector3(1, 2.5, 2)
 [node name="Room1_Wall_North_Left" type="CSGBox3D" parent="Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 1.5, -4)
 use_collision = true
@@ -191,6 +201,11 @@ use_collision = true
 size = Vector3(0.2, 3, 8)
 material = ExtResource("5_wall_material_tres")
 
+
+[node name="Room2_Wall_East_Cut" type="CSGBox3D" parent="Geometry/Room2_Wall_East"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+operation = 2
+size = Vector3(1, 2.5, 2)
 [node name="Room2_Wall_West_North" type="CSGBox3D" parent="Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.5, -18.5)
 use_collision = true
@@ -347,6 +362,11 @@ use_collision = true
 size = Vector3(0.2, 4, 8)
 material = ExtResource("5_wall_material_tres")
 
+
+[node name="Room4_Wall_East_Cut" type="CSGBox3D" parent="Geometry/Room4_Wall_East"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+operation = 2
+size = Vector3(1, 2.5, 2)
 [node name="Room4_Wall_West" type="CSGBox3D" parent="Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2, -32)
 use_collision = true
