@@ -19,6 +19,9 @@
 [ext_resource type="Script" path="res://src/utils/hiding_spot.gd" id="16_hiding_spot_gd"]
 
 
+[ext_resource type="Script" path="res://src/utils/locked_door.gd" id="17_locked_door_gd"]
+[ext_resource type="Script" path="res://src/items/key.gd" id="18_key_gd"]
+[ext_resource type="Script" path="res://src/items/battery.gd" id="19_battery_gd"]
 [sub_resource type="BoxShape3D" id="BoxShape3D_1"]
 size = Vector3(0.6, 0.8, 0.6)
 
@@ -49,6 +52,21 @@ size = Vector3(1.8, 0.7, 0.9)
 [sub_resource type="BoxShape3D" id="BoxShape3D_hiding_2"]
 size = Vector3(0.9, 0.7, 0.9)
 
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hiding_large"]
+size = Vector3(3.6, 0.75, 1.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_key"]
+size = Vector3(0.4, 0.4, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_battery"]
+size = Vector3(0.4, 0.4, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_door"]
+size = Vector3(1.0, 2.5, 0.15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_door_interact"]
+size = Vector3(1.5, 2.5, 1.5)
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_base_level_gd")
@@ -353,6 +371,322 @@ use_collision = true
 size = Vector3(2, 2, 0.2)
 material = ExtResource("5_wall_material_tres")
 
+
+[node name="Cafeteria_Floor" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, -0.1, 0)
+use_collision = true
+size = Vector3(8, 0.2, 12)
+material = ExtResource("6_floor_material_tres")
+
+[node name="Cafeteria_Ceiling" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 3.1, 0)
+use_collision = true
+size = Vector3(8, 0.2, 12)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Cafeteria_Wall_N" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 1.5, 6)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Cafeteria_Wall_S" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 1.5, -6)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Cafeteria_Wall_W" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 1.5, 0)
+use_collision = true
+size = Vector3(0.2, 3, 12)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Cafeteria_Hall_Floor" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, -0.1, 0)
+use_collision = true
+size = Vector3(8, 0.2, 2)
+material = ExtResource("6_floor_material_tres")
+
+[node name="Cafeteria_Hall_Ceiling" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 3.1, 0)
+use_collision = true
+size = Vector3(8, 0.2, 2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Cafeteria_Hall_Wall_N" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.5, 1)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Cafeteria_Hall_Wall_S" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.5, -1)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Security_Floor" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, -0.1, 0)
+use_collision = true
+size = Vector3(8, 0.2, 8)
+material = ExtResource("6_floor_material_tres")
+
+[node name="Security_Ceiling" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 3.1, 0)
+use_collision = true
+size = Vector3(8, 0.2, 8)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Security_Wall_N" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 1.5, 4)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Security_Wall_S" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 1.5, -4)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Security_Wall_E" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1.5, 0)
+use_collision = true
+size = Vector3(0.2, 3, 8)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Security_Hall_Floor" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, -0.1, 0)
+use_collision = true
+size = Vector3(8, 0.2, 2)
+material = ExtResource("6_floor_material_tres")
+
+[node name="Security_Hall_Ceiling" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 3.1, 0)
+use_collision = true
+size = Vector3(8, 0.2, 2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Security_Hall_Wall_N" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.5, 1)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Security_Hall_Wall_S" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.5, -1)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Locker_Floor" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, -0.1, -16)
+use_collision = true
+size = Vector3(8, 0.2, 10)
+material = ExtResource("6_floor_material_tres")
+
+[node name="Locker_Ceiling" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 3.1, -16)
+use_collision = true
+size = Vector3(8, 0.2, 10)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Locker_Wall_N" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1.5, -11)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Locker_Wall_S" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1.5, -21)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Locker_Wall_E" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 1.5, -16)
+use_collision = true
+size = Vector3(0.2, 3, 10)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Locker_Hall_Floor" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, -0.1, -16)
+use_collision = true
+size = Vector3(8, 0.2, 2)
+material = ExtResource("6_floor_material_tres")
+
+[node name="Locker_Hall_Ceiling" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 3.1, -16)
+use_collision = true
+size = Vector3(8, 0.2, 2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Locker_Hall_Wall_N" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 1.5, -15)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Locker_Hall_Wall_S" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 1.5, -17)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Infirmary_Floor" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, -0.1, -32)
+use_collision = true
+size = Vector3(8, 0.2, 8)
+material = ExtResource("6_floor_material_tres")
+
+[node name="Infirmary_Ceiling" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 3.1, -32)
+use_collision = true
+size = Vector3(8, 0.2, 8)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Infirmary_Wall_N" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 1.5, -28)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Infirmary_Wall_S" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 1.5, -36)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Infirmary_Wall_E" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 1.5, -32)
+use_collision = true
+size = Vector3(0.2, 3, 8)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Infirmary_Hall_Floor" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -0.1, -32)
+use_collision = true
+size = Vector3(8, 0.2, 2)
+material = ExtResource("6_floor_material_tres")
+
+[node name="Infirmary_Hall_Ceiling" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 3.1, -32)
+use_collision = true
+size = Vector3(8, 0.2, 2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Infirmary_Hall_Wall_N" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.5, -31)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Infirmary_Hall_Wall_S" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.5, -33)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = ExtResource("5_wall_material_tres")
+
+[node name="Security_Door" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 0)
+script = ExtResource("17_locked_door_gd")
+key_id = "security_key"
+door_name = "Security Office Door"
+locked_message = "Locked. Needs Security Key."
+unlock_message = "Unlocked Security Office Door."
+
+[node name="DoorMesh" type="CSGBox3D" parent="Geometry/Security_Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0.5)
+size = Vector3(0.15, 2.5, 1.0)
+material = SubResource("StandardMaterial3D_table")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Security_Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0.5)
+shape = SubResource("BoxShape3D_door")
+
+[node name="Interactable" type="Area3D" parent="Geometry/Security_Door"]
+script = ExtResource("2_interactable_gd")
+prompt_message = "[E] Open Door"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Security_Door/Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0.5)
+shape = SubResource("BoxShape3D_door_interact")
+
+[node name="Boiler_Door" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 0, -16)
+script = ExtResource("17_locked_door_gd")
+key_id = "boiler_key"
+door_name = "Boiler Room Door"
+locked_message = "Locked. Needs Boiler Key."
+unlock_message = "Unlocked Boiler Room Door."
+
+[node name="DoorMesh" type="CSGBox3D" parent="Geometry/Boiler_Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0.5)
+size = Vector3(0.15, 2.5, 1.0)
+material = SubResource("StandardMaterial3D_table")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Boiler_Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0.5)
+shape = SubResource("BoxShape3D_door")
+
+[node name="Interactable" type="Area3D" parent="Geometry/Boiler_Door"]
+script = ExtResource("2_interactable_gd")
+prompt_message = "[E] Open Door"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Boiler_Door/Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0.5)
+shape = SubResource("BoxShape3D_door_interact")
+
+[node name="Locker_Door" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, -16)
+script = ExtResource("17_locked_door_gd")
+key_id = "locker_key"
+door_name = "Locker Room Door"
+locked_message = "Locked. Needs Locker Key."
+unlock_message = "Unlocked Locker Room Door."
+
+[node name="DoorMesh" type="CSGBox3D" parent="Geometry/Locker_Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0.5)
+size = Vector3(0.15, 2.5, 1.0)
+material = SubResource("StandardMaterial3D_table")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Locker_Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0.5)
+shape = SubResource("BoxShape3D_door")
+
+[node name="Interactable" type="Area3D" parent="Geometry/Locker_Door"]
+script = ExtResource("2_interactable_gd")
+prompt_message = "[E] Open Door"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Locker_Door/Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0.5)
+shape = SubResource("BoxShape3D_door_interact")
+
+[node name="Altar_Door" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
+script = ExtResource("17_locked_door_gd")
+key_id = "altar_key"
+door_name = "Ritual Altar Door"
+locked_message = "Locked. Needs Altar Key."
+unlock_message = "Unlocked Ritual Altar Door."
+
+[node name="DoorMesh" type="CSGBox3D" parent="Geometry/Altar_Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.25, 0)
+size = Vector3(1.0, 2.5, 0.15)
+material = SubResource("StandardMaterial3D_table")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Altar_Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.25, 0)
+shape = SubResource("BoxShape3D_door")
+
+[node name="Interactable" type="Area3D" parent="Geometry/Altar_Door"]
+script = ExtResource("2_interactable_gd")
+prompt_message = "[E] Open Door"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Altar_Door/Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.25, 0)
+shape = SubResource("BoxShape3D_door_interact")
 [node name="Props" type="Node3D" parent="."]
 
 [node name="Room1_Table" type="CSGCombiner3D" parent="Props"]
@@ -573,6 +907,150 @@ use_collision = true
 size = Vector3(0.8, 4, 0.8)
 material = ExtResource("5_wall_material_tres")
 
+
+[node name="Cafeteria_Table_Large" type="CSGCombiner3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, 0)
+use_collision = true
+
+[node name="Tabletop" type="CSGBox3D" parent="Props/Cafeteria_Table_Large"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+size = Vector3(4.0, 0.1, 2.0)
+material = ExtResource("6_floor_material_tres")
+
+[node name="Leg_FL" type="CSGBox3D" parent="Props/Cafeteria_Table_Large"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 0.35, -0.9)
+size = Vector3(0.15, 0.7, 0.15)
+material = SubResource("StandardMaterial3D_table")
+
+[node name="Leg_FR" type="CSGBox3D" parent="Props/Cafeteria_Table_Large"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, 0.35, -0.9)
+size = Vector3(0.15, 0.7, 0.15)
+material = SubResource("StandardMaterial3D_table")
+
+[node name="Leg_BL" type="CSGBox3D" parent="Props/Cafeteria_Table_Large"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 0.35, 0.9)
+size = Vector3(0.15, 0.7, 0.15)
+material = SubResource("StandardMaterial3D_table")
+
+[node name="Leg_BR" type="CSGBox3D" parent="Props/Cafeteria_Table_Large"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, 0.35, 0.9)
+size = Vector3(0.15, 0.7, 0.15)
+material = SubResource("StandardMaterial3D_table")
+
+[node name="HidingSpot" type="Area3D" parent="Props/Cafeteria_Table_Large"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("16_hiding_spot_gd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Cafeteria_Table_Large/HidingSpot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+shape = SubResource("BoxShape3D_hiding_large")
+
+[node name="SecurityKey" type="Node3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0.81, 2)
+script = ExtResource("18_key_gd")
+key_id = "security_key"
+key_name = "Security Key"
+
+[node name="Mesh" type="CSGBox3D" parent="Props/SecurityKey"]
+size = Vector3(0.2, 0.05, 0.3)
+material = SubResource("StandardMaterial3D_metal")
+
+[node name="Interactable" type="Area3D" parent="Props/SecurityKey"]
+script = ExtResource("2_interactable_gd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/SecurityKey/Interactable"]
+shape = SubResource("BoxShape3D_key")
+
+[node name="BoilerKey" type="Node3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0.81, 1.5)
+script = ExtResource("18_key_gd")
+key_id = "boiler_key"
+key_name = "Boiler Room Key"
+
+[node name="Mesh" type="CSGBox3D" parent="Props/BoilerKey"]
+size = Vector3(0.2, 0.05, 0.3)
+material = SubResource("StandardMaterial3D_metal")
+
+[node name="Interactable" type="Area3D" parent="Props/BoilerKey"]
+script = ExtResource("2_interactable_gd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/BoilerKey/Interactable"]
+shape = SubResource("BoxShape3D_key")
+
+[node name="LockerKey" type="Node3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 0.1, -19)
+script = ExtResource("18_key_gd")
+key_id = "locker_key"
+key_name = "Locker Room Key"
+
+[node name="Mesh" type="CSGBox3D" parent="Props/LockerKey"]
+size = Vector3(0.2, 0.05, 0.3)
+material = SubResource("StandardMaterial3D_metal")
+
+[node name="Interactable" type="Area3D" parent="Props/LockerKey"]
+script = ExtResource("2_interactable_gd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/LockerKey/Interactable"]
+shape = SubResource("BoxShape3D_key")
+
+[node name="AltarKey" type="Node3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0.2, -18)
+script = ExtResource("18_key_gd")
+key_id = "altar_key"
+key_name = "Ritual Altar Key"
+
+[node name="Mesh" type="CSGBox3D" parent="Props/AltarKey"]
+size = Vector3(0.2, 0.05, 0.3)
+material = SubResource("StandardMaterial3D_metal")
+
+[node name="Interactable" type="Area3D" parent="Props/AltarKey"]
+script = ExtResource("2_interactable_gd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/AltarKey/Interactable"]
+shape = SubResource("BoxShape3D_key")
+
+[node name="Battery1" type="Node3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.81, -3)
+script = ExtResource("19_battery_gd")
+
+[node name="Mesh" type="CSGCylinder3D" parent="Props/Battery1"]
+radius = 0.06
+height = 0.18
+material = SubResource("StandardMaterial3D_metal")
+
+[node name="Interactable" type="Area3D" parent="Props/Battery1"]
+script = ExtResource("2_interactable_gd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Battery1/Interactable"]
+shape = SubResource("BoxShape3D_battery")
+
+[node name="Battery2" type="Node3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0.1, -33)
+script = ExtResource("19_battery_gd")
+
+[node name="Mesh" type="CSGCylinder3D" parent="Props/Battery2"]
+radius = 0.06
+height = 0.18
+material = SubResource("StandardMaterial3D_metal")
+
+[node name="Interactable" type="Area3D" parent="Props/Battery2"]
+script = ExtResource("2_interactable_gd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Battery2/Interactable"]
+shape = SubResource("BoxShape3D_battery")
+
+[node name="Note3" parent="Props" instance=ExtResource("7_note_tscn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 0.81, -1.0)
+note_contents = "Day 12: Dr. Miller's experiments are out of control. He claims the patient's consciousness has successfully anchored to a porcelain doll, but it feels like he has opened a doorway to something far more ancient. Security keys have been restricted to the East block."
+
+[node name="Note4" parent="Props" instance=ExtResource("7_note_tscn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.81, 4.0)
+note_contents = "Day 29: The entity is drawing power from the electrical grid. If you hear her shriek nearby, do not run down the straight corridors, you will not outrun her. Get low and slide underneath the large tables in the Cafeteria. She cannot see you if you remain crouched and silent."
+
+[node name="Note5" parent="Props" instance=ExtResource("7_note_tscn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5, 0.1, -15.0)
+note_contents = "Day 48: The sacrificial chamber door at the North wing is locked tight. The Altar key is stored in the lockers of the East wing. But be careful... the Boiler Key was taken by security to the East guard desk."
 [node name="Lights" type="Node3D" parent="."]
 
 [node name="FlickeringCeilingLight1" type="OmniLight3D" parent="Lights"]

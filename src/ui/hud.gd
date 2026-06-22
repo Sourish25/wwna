@@ -13,6 +13,7 @@ extends CanvasLayer
 var _is_reading: bool = false
 var _active_note_text: String = ""
 var dialog_audio_player: AudioStreamPlayer
+var status_label: Label = null
 
 func _ready() -> void:
 	# Make sure HUD processes input even when the scene tree is paused
@@ -36,6 +37,88 @@ func _ready() -> void:
 	jumpscare_overlay.visible = false
 	victory_overlay.visible = false
 	subtitle_label.text = ""
+	
+	# Initialize status label dynamically
+	status_label = Label.new()
+	status_label.name = "StatusLabel"
+	status_label.text = ""
+	
+	# Position at top right
+	status_label.anchors_preset = Control.PRESET_TOP_RIGHT
+	status_label.anchor_left = 1.0
+	status_label.anchor_right = 1.0
+	status_label.offset_left = -320
+	status_label.offset_top = 20
+	status_label.offset_right = -20
+	status_label.offset_bottom = 200
+	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	
+	# Add a shadow / outline style
+	var settings := LabelSettings.new()
+	settings.font_size = 14
+	settings.outline_size = 3
+	settings.outline_color = Color(0, 0, 0, 1)
+	settings.font_color = Color(0.9, 0.9, 0.9, 1)
+	status_label.label_settings = settings
+	
+	$HUDControl.add_child(status_label)
+
+func _process(_delta: float) -> void:
+	var players := get_tree().get_nodes_in_group("player")
+	if players.size() > 0:
+		var player := players[0] as Player
+		if player and status_label:
+			var text := ""
+			
+			# Render battery meter
+			var bat_percent := int(player.flashlight_battery * 100)
+			var bat_bar := ""
+			for i in range(10):
+				if i < int(player.flashlight_battery * 10):
+					bat_bar += "="
+				else:
+					bat_bar += " "
+			text += "BATTERY: [" + bat_bar + "] " + str(bat_percent) + "%\n"
+			
+			# Render sanity meter
+			var san_percent := int(player.sanity * 100)
+			var san_bar := ""
+			for i in range(10):
+				if i < int(player.sanity * 10):
+					san_bar += "="
+				else:
+					san_bar += " "
+			var san_text := "STABLE"
+			if player.sanity < 0.35:
+				san_text = "HYSTERICAL"
+				status_label.label_settings.font_color = Color(1.0, 0.1, 0.1, 1)
+			elif player.sanity < 0.7:
+				san_text = "PARANOID"
+				status_label.label_settings.font_color = Color(1.0, 0.6, 0.1, 1)
+			else:
+				status_label.label_settings.font_color = Color(0.9, 0.9, 0.9, 1)
+			text += "SANITY: [" + san_bar + "] " + san_text + "\n"
+			
+			# Render keys list
+			if not player.keys.is_empty():
+				var keys_str := ""
+				for key in player.keys:
+					var kname := key.replace("_", " ").capitalize()
+					if keys_str != "":
+						keys_str += ", "
+					keys_str += kname
+				text += "KEYS: " + keys_str + "\n"
+				
+			# Render doll status
+			if player.has_doll:
+				text += "\n[SACRIFICIAL VESSEL ACQUIRED]\n"
+				
+			# Render hidden status
+			if player.is_hidden:
+				text += "[HIDDEN UNDER TABLE]\n"
+				
+			status_label.text = text
+
 
 func _input(event: InputEvent) -> void:
 	if _is_reading:

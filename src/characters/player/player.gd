@@ -19,6 +19,10 @@ var _ghost_node: Ghost = null
 var is_flashlight_enabled: bool = true
 var is_crouching: bool = false
 var is_hidden: bool = false
+var keys: Array[String] = []
+var flashlight_battery: float = 1.0
+var sanity: float = 1.0
+
 
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -67,9 +71,17 @@ func _input(event: InputEvent) -> void:
 		
 	if event.is_action_pressed("toggle_flashlight") or is_toggle_key:
 		if flashlight:
-			is_flashlight_enabled = not is_flashlight_enabled
-			flashlight.visible = is_flashlight_enabled
-			AudioSynth.play_flashlight_click(self)
+			if not is_flashlight_enabled and flashlight_battery <= 0.0:
+				# Cannot turn on, battery dead
+				AudioSynth.play_flashlight_click(self)
+				EventBus.interaction_prompted.emit("Flashlight battery is dead")
+				await get_tree().create_timer(1.2).timeout
+				EventBus.interaction_cleared.emit()
+			else:
+				is_flashlight_enabled = not is_flashlight_enabled
+				flashlight.visible = is_flashlight_enabled
+				AudioSynth.play_flashlight_click(self)
+
 
 	# E key Interaction check
 	var is_interact_key := false
@@ -149,6 +161,45 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, current_speed)
 		velocity.z = move_toward(velocity.z, 0, current_speed)
+
+	# Update Flashlight Battery
+	if is_flashlight_enabled and flashlight and flashlight.visible:
+		# Depletes in ~75 seconds of continuous use
+		flashlight_battery -= delta * 0.013
+		if flashlight_battery <= 0.0:
+			flashlight_battery = 0.0
+			is_flashlight_enabled = false
+			flashlight.visible = false
+			AudioSynth.play_flashlight_click(self) # Dead battery shutoff click
+			EventBus.dialog_triggered.emit("My flashlight battery is dead! I need to find a replacement.", 4.0, "")
+			
+	# Update Sanity
+	var in_dark := not (is_flashlight_enabled and flashlight and flashlight.visible)
+	var near_ghost := false
+	if _ghost_node and _ghost_node.visible and _ghost_node.current_state != Ghost.State.DORMANT:
+		var dist := global_position.distance_to(_ghost_node.global_position)
+		if dist < 12.0:
+			near_ghost = true
+			
+	if near_ghost:
+		sanity -= delta * 0.06 # Drains in ~16s when close to ghost
+	elif in_dark:
+		sanity -= delta * 0.015 # Drains in ~66s when in the dark
+	else:
+		sanity = min(sanity + delta * 0.01, 1.0) # Restores slowly
+		
+	sanity = clamp(sanity, 0.0, 1.0)
+	
+	# Apply sanity horror effects (screen shake / camera jitter)
+	if sanity < 0.4:
+		# Add a slight camera jitter to simulate terror
+		if camera:
+			camera.h_offset = randf_range(-0.02, 0.02) * (1.0 - sanity)
+			camera.v_offset = randf_range(-0.02, 0.02) * (1.0 - sanity)
+	else:
+		if camera:
+			camera.h_offset = 0.0
+			camera.v_offset = 0.0
 
 	move_and_slide()
 	_process_interaction()

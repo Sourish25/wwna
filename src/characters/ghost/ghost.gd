@@ -20,38 +20,28 @@ var _shriek_timer: float = 0.0
 var _patrol_points: Array[Vector3] = []
 var _current_patrol_idx: int = 0
 var _base_y: float = 0.0
+var _walk_cycle_time: float = 0.0
 
 func _ready() -> void:
 	add_to_group("ghost")
 	_base_y = global_position.y
-	# Setup patrol points around the main facility corridors
+	# Setup patrol points around the main facility corridors and expanded rooms
 	_patrol_points = [
 		Vector3(0, _base_y, -8),
+		Vector3(-16, _base_y, 0),    # Cafeteria
 		Vector3(0, _base_y, -16),
-		Vector3(-9, _base_y, -16),
+		Vector3(17, _base_y, -16),   # Locker Room
+		Vector3(-17, _base_y, -16),  # Boiler Room
 		Vector3(0, _base_y, -24),
+		Vector3(16, _base_y, 0),     # Security Office
+		Vector3(18, _base_y, -32),   # Infirmary
 	]
+
 	
 	# Load and assign monster material to all MeshInstance3D nodes in the model
 	var mat := load("res://assets/materials/monster_material.tres") as Material
 	if mat:
 		_apply_material_to_meshes(visual_mesh, mat)
-		
-	# Search for AnimationPlayer in the FBX scene and auto-play
-	var anim_player: AnimationPlayer = visual_mesh.find_child("AnimationPlayer", true, false) as AnimationPlayer
-	if anim_player:
-		var anim_name = "mixamo_com"
-		if anim_player.has_animation(anim_name):
-			var anim = anim_player.get_animation(anim_name)
-			if anim:
-				anim.loop_mode = Animation.LOOP_LINEAR
-			anim_player.play(anim_name)
-		elif anim_player.get_animation_list().size() > 0:
-			var default_anim = anim_player.get_animation_list()[0]
-			var anim = anim_player.get_animation(default_anim)
-			if anim:
-				anim.loop_mode = Animation.LOOP_LINEAR
-			anim_player.play(default_anim)
 
 func _physics_process(delta: float) -> void:
 	_timer += delta
@@ -62,6 +52,9 @@ func _physics_process(delta: float) -> void:
 	visual_mesh.position = Vector3.ZERO
 	visual_mesh.rotation.z = 0.0
 	
+	# Run procedural skeleton walking animations
+	_animate_skeleton(delta)
+	
 	# Apply gravity to ghost so it walks on the floor
 	var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 	if not is_on_floor():
@@ -71,8 +64,9 @@ func _physics_process(delta: float) -> void:
 	
 	if not target_player:
 		# Search for player
-		var players = get_tree().get_nodes_in_group("player")
+		var players := get_tree().get_nodes_in_group("player")
 		if players.size() > 0:
+
 			target_player = players[0] as Player
 		return
 		
@@ -252,3 +246,63 @@ func _apply_material_to_meshes(node: Node, mat: Material) -> void:
 		node.material_override = mat
 	for child in node.get_children():
 		_apply_material_to_meshes(child, mat)
+
+func _animate_skeleton(delta: float) -> void:
+	var skeleton: Skeleton3D = visual_mesh.find_child("Skeleton3D", true, false) as Skeleton3D
+	if not skeleton:
+		return
+		
+	# Determine if the ghost is moving horizontally
+	var horiz_vel := Vector2(velocity.x, velocity.z)
+	var is_moving := horiz_vel.length_squared() > 0.05
+	var anim_speed := 10.0 if current_state == State.CHASE else 5.0
+	
+	if is_moving:
+		_walk_cycle_time += delta * anim_speed
+	else:
+		# Slowly transition back to neutral standing pose
+		var angle_diff := wrapf(_walk_cycle_time, -PI, PI)
+		_walk_cycle_time = move_toward(_walk_cycle_time, _walk_cycle_time - angle_diff, delta * 8.0)
+		
+	var swing := sin(_walk_cycle_time)
+	var cos_swing := cos(_walk_cycle_time)
+	
+	# Thighs swing back and forth
+	_set_bone_rot(skeleton, "mixamorig_LeftUpLeg", Vector3(1, 0, 0), swing * 0.45)
+	_set_bone_rot(skeleton, "mixamorig_RightUpLeg", Vector3(1, 0, 0), -swing * 0.45)
+	
+	# Knee bend (shins bend backward when swinging back)
+	var left_knee := 0.0
+	if swing < 0.0:
+		left_knee = -swing * 0.5
+	_set_bone_rot(skeleton, "mixamorig_LeftLeg", Vector3(1, 0, 0), left_knee)
+	
+	var right_knee := 0.0
+	if swing > 0.0:
+		right_knee = swing * 0.5
+	_set_bone_rot(skeleton, "mixamorig_RightLeg", Vector3(1, 0, 0), right_knee)
+	
+	# Arm poses
+	if current_state == State.CHASE:
+		# Zombie-like chase pose: arms raised straight forward, slightly swaying
+		_set_bone_rot(skeleton, "mixamorig_LeftArm", Vector3(0, 0, 1), -1.2)
+		_set_bone_rot(skeleton, "mixamorig_LeftArm", Vector3(1, 0, 0), -1.2 + swing * 0.1)
+		
+		_set_bone_rot(skeleton, "mixamorig_RightArm", Vector3(0, 0, 1), 1.2)
+		_set_bone_rot(skeleton, "mixamorig_RightArm", Vector3(1, 0, 0), -1.2 - swing * 0.1)
+	else:
+		# Normal walking arm swing at sides
+		_set_bone_rot(skeleton, "mixamorig_LeftArm", Vector3(1, 0, 0), -swing * 0.35)
+		_set_bone_rot(skeleton, "mixamorig_LeftArm", Vector3(0, 0, 1), 0.0)
+		_set_bone_rot(skeleton, "mixamorig_RightArm", Vector3(1, 0, 0), swing * 0.35)
+		_set_bone_rot(skeleton, "mixamorig_RightArm", Vector3(0, 0, 1), 0.0)
+		
+	# Spine swaying and head bobbing
+	_set_bone_rot(skeleton, "mixamorig_Spine", Vector3(0, 0, 1), cos_swing * 0.05)
+	_set_bone_rot(skeleton, "mixamorig_Head", Vector3(1, 0, 0), sin(_timer * 2.0) * 0.08)
+
+func _set_bone_rot(skeleton: Skeleton3D, bone_name: String, axis: Vector3, angle: float) -> void:
+	var idx := skeleton.find_bone(bone_name)
+	if idx != -1:
+		skeleton.set_bone_pose_rotation(idx, Quaternion(axis.normalized(), angle))
+

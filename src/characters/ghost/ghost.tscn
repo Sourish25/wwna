@@ -1,26 +1,26 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://b85gllobmqmxg"]
 
-[ext_resource type="Script" path="res://src/characters/ghost/ghost.gd" id="1_ghost_gd"]
-[ext_resource type="PackedScene" path="res://assets/Characters_psx/Models/Killers/Character_Monster.fbx" id="2_monster_fbx"]
+[ext_resource type="Script" uid="uid://dcble11qo6tib" path="res://src/characters/ghost/ghost.gd" id="1_ghost_gd"]
+[ext_resource type="PackedScene" uid="uid://rcfy32q8f6bn" path="res://assets/Characters_psx/Models/Killers/Character_Monster.fbx" id="2_monster_fbx"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 0.35
 height = 1.8
 
-[node name="Ghost" type="CharacterBody3D" groups=["ghost"]]
+[node name="Ghost" type="CharacterBody3D" unique_id=220363191 groups=["ghost"]]
 collision_layer = 2
 collision_mask = 3
 script = ExtResource("1_ghost_gd")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1098267263]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_1")
 
-[node name="VisualMesh" type="Node3D" parent="."]
+[node name="VisualMesh" type="Node3D" parent="." unique_id=1237653453]
 
-[node name="MonsterModel" parent="VisualMesh" instance=ExtResource("2_monster_fbx")]
+[node name="MonsterModel" parent="VisualMesh" unique_id=159774311 instance=ExtResource("2_monster_fbx")]
 transform = Transform3D(-0.35, 0, -3.0598e-08, 0, 0.35, 0, 3.0598e-08, 0, -0.35, 0, 0, 0)
 
-[node name="RayCast3D" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=882090766]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 target_position = Vector3(0, 0, -4)
